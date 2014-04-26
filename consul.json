@@ -1,0 +1,13 @@
+{
+    "service": {
+        "name": "mysql",
+        "tags": ["master"],
+        "port": 3306,
+        "check": {
+	    "id": "mysql-connection",
+	    "name": "Mysql Connection",
+            "script": "/check_mysql.sh",
+            "interval": "5s"
+        }
+    }
+}
