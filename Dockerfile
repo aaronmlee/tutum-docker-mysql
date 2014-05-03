@@ -15,8 +15,8 @@ ADD import_sql.sh /import_sql.sh
 RUN chmod 755 /*.sh
 
 # Install consul
-RUN curl -s -L -O https://dl.bintray.com/mitchellh/consul/0.1.0_linux_386.zip
-RUN unzip 0.1.0_linux_386.zip
+RUN curl -s -L -O https://dl.bintray.com/mitchellh/consul/0.2.0_linux_386.zip
+RUN unzip 0.2.0_linux_386.zip
 RUN cp consul /usr/bin/consul
 RUN chmod 555 /usr/bin/consul
 
@@ -38,11 +38,8 @@ RUN chmod 755 /check_mysql.sh
 # Expose MySQL and consul ports
 EXPOSE 3306 8300 8301 8302 8400 8500 8600 8300/udp 8301/udp 8302/udp 8400/udp 8500/udp 8600/udp 
 
-# Set a default consul join agent host (point to docker0 on a vagrant host, which needs 
-# to be running a `consul agent -server -bootstrap --data-dir=/data/dir
-ENV CONSUL_JOIN_IP 172.17.42.1
-
-# start supervisord
+# start supervisord -- ATTENTION: consul startup requires that this container be linked to another with the name CONSUL-LOCAL
+# run -i -rm -name mysql-consul -v /tmp/varlog:/var/log -link consul-agent-local-join:CONSUL_LOCAL
 CMD ["./run.sh"]
 #CMD /usr/bin/consul agent -server -bootstrap --data-dir=/tmp/consul
 #CMD /usr/bin/consul agent --data-dir=/tmp/consul -join $CONSUL_JOIN_IP
